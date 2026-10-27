@@ -11,7 +11,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { SupportedLanguages, Theme } from './app/core/constants';
 import { AppStore } from './app/core/store/app.store';
-import { initialPaginatedState } from './app/core/utils/initial-paginated-state';
+import { emptyPaginated } from './app/core/utils/empty-paginated';
 import { PostsStore } from './app/core/store/posts.store';
 import { UserStore } from './app/core/store/user.store';
 import { PostApi } from './app/core/services/post-api';
@@ -78,7 +78,7 @@ registerGlobalBeforeEach(() => {
         useValue: {
           posts: Object.assign(
             () => ({
-              data: initialPaginatedState([]),
+              data: emptyPaginated(),
               isLoading: false,
               lastLoadParams: { page: 1, pageSize: 10 },
             }),

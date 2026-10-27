@@ -6,7 +6,7 @@
   withState,
 } from '@ngrx/signals';
 import { Paginated, Post, TableLoadParams } from '../models';
-import { initialPaginatedState } from '../utils/initial-paginated-state';
+import { emptyPaginated } from '../utils/empty-paginated';
 import { toObservable } from '@angular/core/rxjs-interop';
 
 export const DEFAULT_POSTS_LOAD_PARAMS: TableLoadParams = {
@@ -26,7 +26,7 @@ interface PostsState {
 
 const initialState: PostsState = {
   posts: {
-    data: initialPaginatedState<Post>([]),
+    data: emptyPaginated<Post>(),
     isLoading: false,
     lastLoadParams: DEFAULT_POSTS_LOAD_PARAMS,
   },
@@ -84,7 +84,7 @@ export const PostsStore = signalStore(
     },
     resetPosts() {
       patchState(store, {
-        posts: { ...store.posts(), data: initialPaginatedState<Post>([]) },
+        posts: { ...store.posts(), data: emptyPaginated<Post>() },
       });
     },
     setPostsLoading(isLoading: boolean) {

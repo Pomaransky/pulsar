@@ -1,13 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { DeepSignal } from '@ngrx/signals';
-import { UserStore } from '../../store/user.store';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
+import { UsersStore } from '../../store/users.store';
 import { UserApiService } from '../../services/user-api-service';
 import { TableModule } from 'primeng/table';
 import { User, RowActionItem, TableLoadParams } from '../../models';
@@ -26,33 +18,30 @@ import { PageTitle } from '../../constants';
   templateUrl: './users.html',
   styleUrl: './users.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UsersStore],
 })
 export class Users implements OnInit {
   @ViewChild(DetailsDialog) detailsDialog!: DetailsDialog;
   @ViewChild(ApplyBanDialog) applyBanDialog!: ApplyBanDialog;
 
   private userService = inject(UserApiService);
-  private userStore = inject(UserStore);
+  private usersStore = inject(UsersStore);
   private destroyRef = inject(DestroyRef);
   private titleService = inject(Title);
   private translate = inject(TranslateService);
 
   usersTableConfig = USERS_TABLE_CONFIG;
 
-  usersData: DeepSignal<User[]> = this.userStore.users.data.data;
-  totalRecords: DeepSignal<number> =
-    this.userStore.users.data.meta.pagination.total;
-  isUsersLoading: DeepSignal<boolean> = this.userStore.users.isLoading;
+  usersData = this.usersStore.users;
+  totalRecords = this.usersStore.totalRecords;
+  isUsersLoading = this.usersStore.isLoading;
 
   ngOnInit(): void {
     this.titleService.setTitle(PageTitle.PULSAR_USERS);
   }
 
   onTableLoad(params: TableLoadParams): void {
-    this.userService
-      .getUsers(params)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+    this.usersStore.load(params);
   }
 
   rowActions(user: User): RowActionItem[] {
@@ -99,6 +88,6 @@ export class Users implements OnInit {
         banExpiresAt: null,
       })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe(() => this.usersStore.reload());
   }
 }
