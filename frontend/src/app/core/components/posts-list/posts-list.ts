@@ -1,22 +1,16 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   inject,
   Input,
-  OnDestroy,
   OnInit,
   SimpleChanges,
   OnChanges,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TableLoadParams } from '../../models';
-import { PostsStore } from '../../store/posts.store';
-import { PostApi } from '../../services/post-api';
+import { PostsQuery, PostsStore } from '../../store/posts.store';
 import { TranslateModule } from '@ngx-translate/core';
 import { PostCard } from '../post-card/post-card';
 import { InfiniteScrollDirective } from '../../directives/infinite-scroll.directive';
-import { tap } from 'rxjs';
 import { Spinner } from '../spinner/spinner';
 
 @Component({
@@ -26,65 +20,35 @@ import { Spinner } from '../spinner/spinner';
   styleUrl: './posts-list.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PostsList implements OnInit, OnDestroy, OnChanges {
+export class PostsList implements OnInit, OnChanges {
   @Input() parentDocumentId: string | undefined = undefined;
   @Input() authorDocumentId: string | undefined = undefined;
   private postStore = inject(PostsStore);
-  private postApi = inject(PostApi);
-  private destroyRef = inject(DestroyRef);
 
   postsData = this.postStore.posts.data.data;
   isPostsLoading = this.postStore.posts.isLoading;
-
-  hasMorePosts(): boolean {
-    const pagination = this.postStore.posts().data.meta.pagination;
-    return pagination.page < pagination.pageCount && pagination.total > 0;
-  }
+  hasMorePosts = this.postStore.hasMorePosts;
 
   ngOnInit(): void {
     if (!this.parentDocumentId && !this.authorDocumentId) {
-      this.loadPosts(this.postStore.posts.lastLoadParams());
+      this.postStore.loadPosts(this.query());
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['parentDocumentId'] || changes['authorDocumentId']) {
-      this.postStore.resetPostsLoadParams();
-      this.loadPosts(this.postStore.posts.lastLoadParams());
+      this.postStore.loadPosts(this.query());
     }
   }
 
   onInfiniteScroll(): void {
-    if (this.hasMorePosts() && !this.isPostsLoading()) {
-      this.loadMore();
-    }
+    this.postStore.loadMorePosts(this.query());
   }
 
-  private loadPosts(params: TableLoadParams): void {
-    this.postStore.resetPosts();
-    this.postApi
-      .getPosts(params, this.parentDocumentId, this.authorDocumentId)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        tap((posts) => this.postStore.setPosts(posts)),
-      )
-      .subscribe();
-  }
-
-  private loadMore(): void {
-    if (!this.hasMorePosts() || this.isPostsLoading()) return;
-    const params = this.postStore.posts.lastLoadParams();
-    this.postApi
-      .getPosts(
-        { ...params, page: params.page + 1 },
-        this.parentDocumentId,
-        this.authorDocumentId,
-      )
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
-  }
-
-  ngOnDestroy(): void {
-    this.postStore.resetPostsLoadParams();
+  private query(): PostsQuery {
+    return {
+      parentDocumentId: this.parentDocumentId,
+      authorDocumentId: this.authorDocumentId,
+    };
   }
 }
