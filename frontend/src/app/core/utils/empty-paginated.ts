@@ -1,11 +1,11 @@
 import { Paginated } from '../models';
 
-export const initialPaginatedState = <T>(data: T[]): Paginated<T> => ({
-  data: data,
+export const emptyPaginated = <T>(): Paginated<T> => ({
+  data: [],
   meta: {
     pagination: {
       page: 1,
-      pageSize: 3,
+      pageSize: 0,
       total: 0,
       pageCount: 0,
     },
