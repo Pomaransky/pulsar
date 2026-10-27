@@ -54,7 +54,6 @@ export class PostCard {
   me = this.userStore.me.data;
 
   navigateToPost(post: Post): void {
-    this.postsStore.setCurrentPost(post);
     this.router.navigate(['/post', post.documentId]);
   }
 

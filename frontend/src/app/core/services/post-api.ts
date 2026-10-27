@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { Paginated, Post, StrapiRefUid, TableLoadParams } from '../models';
 import {
   catchError,
-  finalize,
   map,
   Observable,
   switchMap,
@@ -12,7 +11,6 @@ import {
 import { tableLoadParamsToStrapiQuery } from '../utils/table-load-params-to-query';
 import { ApiService } from './api-service';
 import { FileApiService } from './file-api-service';
-import { PostsStore } from '../store/posts.store';
 import { ToastService } from './toast-service';
 import { UserStore } from '../store/user.store';
 import { TranslateService } from '@ngx-translate/core';
@@ -21,7 +19,6 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root',
 })
 export class PostApi extends ApiService {
-  private postsStore = inject(PostsStore);
   private userStore = inject(UserStore);
   private toastService = inject(ToastService);
   private translate = inject(TranslateService);
@@ -50,7 +47,6 @@ export class PostApi extends ApiService {
     authorDocumentId?: string,
   ): Observable<Paginated<Post>> {
     const { page, pageSize } = params;
-    this.postsStore.setPostsLoading(true);
     const { sort, filter } = tableLoadParamsToStrapiQuery(params);
     const parent = parentId
       ? `&filters[parent][documentId][$eq]=${parentId}`
@@ -61,13 +57,11 @@ export class PostApi extends ApiService {
     const base = `posts?populate=author.avatar&populate=media&pagination[page]=${page}&pagination[pageSize]=${pageSize}`;
     const url = `${base}${sort}${filter}${parent}${author}`;
     return this.get<Paginated<Post>>(url).pipe(
-      tap((posts) => this.postsStore.addPosts(posts)),
       catchError(() => {
-        return throwError(
-          () => new Error(this.translate.instant('posts.postsFetchError')),
-        );
+        const msg = this.translate.instant('posts.postsFetchError');
+        this.toastService.errorToast(msg);
+        return throwError(() => new Error(msg));
       }),
-      finalize(() => this.postsStore.setPostsLoading(false)),
     );
   }
 
@@ -119,8 +113,7 @@ export class PostApi extends ApiService {
       : createPost$;
 
     return post$.pipe(
-      tap((post) => {
-        this.postsStore.prependPost(post, parentDocumentId);
+      tap(() => {
         if (isComment) {
           this.toastService.successToast(
             this.translate.instant('posts.commentAdded'),

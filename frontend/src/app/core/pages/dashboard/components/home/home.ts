@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserStore } from '../../../../store/user.store';
+import { PostsStore } from '../../../../store/posts.store';
 import { PostApi } from '../../../../services/post-api';
 import { ButtonModule } from 'primeng/button';
 import { PostForm, PostsList } from '../../../../components';
@@ -24,6 +25,7 @@ import { PageTitle } from '../../../../constants';
 export class Home implements OnInit {
   private postService = inject(PostApi);
   private userStore = inject(UserStore);
+  private postsStore = inject(PostsStore);
   private destroyRef = inject(DestroyRef);
   private titleService = inject(Title);
 
@@ -44,7 +46,10 @@ export class Home implements OnInit {
       .addPost(payload.content, payload.parentDocumentId, payload.media)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.postFormRef().reset(),
+        next: (post) => {
+          this.postsStore.prependPost(post, payload.parentDocumentId);
+          this.postFormRef().reset();
+        },
       });
   }
 }
