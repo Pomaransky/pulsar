@@ -1,0 +1,9 @@
+:host ::ng-deep {
+  .p-datatable-mask.p-overlay-mask-leave-active {
+    pointer-events: none;
+
+    .p-datatable-loading-icon {
+      display: none;
+    }
+  }
+}

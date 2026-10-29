@@ -4,7 +4,6 @@ import { ApiService } from './api-service';
 import {
   catchError,
   finalize,
-  map,
   Observable,
   of,
   tap,
@@ -94,22 +93,14 @@ export class UserApiService extends ApiService {
 
   getUsers(params: TableLoadParams): Observable<Paginated<User>> {
     const { page, pageSize } = params;
-    this.userStore.setUsersLoadParams(params);
-    this.userStore.setUsersLoading(true);
     const { sort, filter } = tableLoadParamsToStrapiQuery(params);
     const base = `users?populate=role&pagination[page]=${page}&pagination[pageSize]=${pageSize}&filters[role][type][$eq]=authenticated`;
     const url = `${base}${sort}${filter}`;
     return this.get<Paginated<User>>(url).pipe(
-      tap((users) => {
-        this.userStore.setUsers(users);
-      }),
       catchError(() => {
         const msg = this.translate.instant('user.usersFetchError');
         this.toastService.errorToast(msg);
         return throwError(() => new Error(msg));
-      }),
-      finalize(() => {
-        this.userStore.setUsersLoading(false);
       }),
     );
   }
@@ -124,10 +115,6 @@ export class UserApiService extends ApiService {
         const messageKey =
           ban.banType == null ? 'user.userBanRemoved' : 'user.userBanApplied';
         this.toastService.successToast(this.translate.instant(messageKey));
-      }),
-      switchMap((user) => {
-        const params = this.userStore.users().lastLoadParams;
-        return params ? this.getUsers(params).pipe(map(() => user)) : of(user);
       }),
       catchError((error) => {
         const msg =

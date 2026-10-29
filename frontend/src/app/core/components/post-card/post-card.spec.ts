@@ -14,7 +14,7 @@ describe('PostCard', () => {
   let fixture: ComponentFixture<PostCard>;
   let router: jasmine.SpyObj<Pick<Router, 'navigate'>>;
   let postsStore: jasmine.SpyObj<
-    Pick<InstanceType<typeof PostsStore>, 'setCurrentPost' | 'patchPostLike'>
+    Pick<InstanceType<typeof PostsStore>, 'patchPostLike'>
   >;
 
   const mockPost: Post = {
@@ -46,10 +46,7 @@ describe('PostCard', () => {
 
   beforeEach(async () => {
     router = jasmine.createSpyObj('Router', ['navigate']);
-    postsStore = jasmine.createSpyObj('PostsStore', [
-      'setCurrentPost',
-      'patchPostLike',
-    ]);
+    postsStore = jasmine.createSpyObj('PostsStore', ['patchPostLike']);
 
     await TestBed.configureTestingModule({
       imports: [PostCard, TranslateModule.forRoot()],
@@ -73,10 +70,9 @@ describe('PostCard', () => {
   });
 
   describe('navigateToPost', () => {
-    it('should set current post and navigate to post detail', () => {
+    it('should navigate to post detail', () => {
       component.navigateToPost(mockPost);
 
-      expect(postsStore.setCurrentPost).toHaveBeenCalledWith(mockPost);
       expect(router.navigate).toHaveBeenCalledWith([
         '/post',
         mockPost.documentId,

@@ -20,6 +20,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Dialog, InputField } from '../../../../components';
 import { User, UserBanType, SelectOption } from '../../../../models';
 import { UserApiService } from '../../../../services/user-api-service';
+import { UsersStore } from '../../../../store/users.store';
 import {
   BAN_DURATION_PRESETS,
   BAN_TYPE_OPTIONS,
@@ -40,6 +41,7 @@ import {
 })
 export class ApplyBanDialog implements OnInit {
   private userApiService = inject(UserApiService);
+  private usersStore = inject(UsersStore);
   private destroyRef = inject(DestroyRef);
   private translate = inject(TranslateService);
   private cdr = inject(ChangeDetectorRef);
@@ -122,6 +124,6 @@ export class ApplyBanDialog implements OnInit {
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.visible.set(false)),
       )
-      .subscribe();
+      .subscribe(() => this.usersStore.reload());
   }
 }

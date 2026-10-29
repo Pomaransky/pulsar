@@ -1,13 +1,18 @@
-﻿import {
+﻿import { computed, inject } from '@angular/core';
+import {
   patchState,
   signalStore,
+  withComputed,
   withMethods,
   withProps,
   withState,
 } from '@ngrx/signals';
 import { Paginated, Post, TableLoadParams } from '../models';
-import { initialPaginatedState } from '../utils/initial-paginated-state';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { emptyPaginated } from '../utils/empty-paginated';
+import { rxResource, toObservable } from '@angular/core/rxjs-interop';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { catchError, EMPTY, pipe, switchMap, tap } from 'rxjs';
+import { PostApi } from '../services/post-api';
 
 export const DEFAULT_POSTS_LOAD_PARAMS: TableLoadParams = {
   page: 1,
@@ -15,22 +20,27 @@ export const DEFAULT_POSTS_LOAD_PARAMS: TableLoadParams = {
   sort: { field: 'createdAt', order: 'desc' },
 };
 
+export interface PostsQuery {
+  parentDocumentId?: string;
+  authorDocumentId?: string;
+}
+
 interface PostsState {
   posts: {
     data: Paginated<Post>;
     isLoading: boolean;
     lastLoadParams: TableLoadParams;
   };
-  currentPost: Post | null;
+  currentPostId: string | undefined;
 }
 
 const initialState: PostsState = {
   posts: {
-    data: initialPaginatedState<Post>([]),
+    data: emptyPaginated<Post>(),
     isLoading: false,
     lastLoadParams: DEFAULT_POSTS_LOAD_PARAMS,
   },
-  currentPost: null,
+  currentPostId: undefined,
 };
 
 function patchPostInList(
@@ -48,8 +58,26 @@ function patchPostInList(
 
 export const PostsStore = signalStore(
   withState<PostsState>(initialState),
-  withProps(({ posts }) => ({
-    posts$: toObservable(posts),
+  withProps(({ posts, currentPostId }) => {
+    const postApi = inject(PostApi);
+    return {
+      posts$: toObservable(posts),
+      _currentPostResource: rxResource({
+        params: () => currentPostId(),
+        stream: ({ params }) => postApi.getPost(params),
+      }),
+    };
+  }),
+  withComputed(({ posts, _currentPostResource }) => ({
+    hasMorePosts: computed(() => {
+      const { page, pageCount, total } = posts().data.meta.pagination;
+      return page < pageCount && total > 0;
+    }),
+    currentPost: computed(() =>
+      _currentPostResource.hasValue() ? _currentPostResource.value() : null,
+    ),
+    isCurrentPostLoading: _currentPostResource.isLoading,
+    currentPostError: _currentPostResource.error,
   })),
   withMethods((store) => ({
     resetPostsLoadParams() {
@@ -79,19 +107,19 @@ export const PostsStore = signalStore(
         },
       });
     },
-    setPosts(posts: Paginated<Post>) {
-      patchState(store, { posts: { ...store.posts(), data: posts } });
-    },
     resetPosts() {
       patchState(store, {
-        posts: { ...store.posts(), data: initialPaginatedState<Post>([]) },
+        posts: { ...store.posts(), data: emptyPaginated<Post>() },
       });
     },
     setPostsLoading(isLoading: boolean) {
       patchState(store, { posts: { ...store.posts(), isLoading } });
     },
-    setCurrentPost(post: Post | null) {
-      patchState(store, { currentPost: post });
+    loadCurrentPost(documentId: string) {
+      patchState(store, { currentPostId: documentId });
+    },
+    clearCurrentPost() {
+      patchState(store, { currentPostId: undefined });
     },
     patchPostLike(postDocumentId: string, liked: boolean, likesTotal: number) {
       const postsData = store.posts().data;
@@ -107,12 +135,10 @@ export const PostsStore = signalStore(
 
       const currentPost = store.currentPost();
       if (currentPost?.documentId === postDocumentId) {
-        patchState(store, {
-          currentPost: {
-            ...currentPost,
-            likedByMe: liked,
-            likesTotal,
-          },
+        store._currentPostResource.set({
+          ...currentPost,
+          likedByMe: liked,
+          likesTotal,
         });
       }
     },
@@ -133,13 +159,47 @@ export const PostsStore = signalStore(
 
       const currPost = store.currentPost();
       if (parentDocumentId && currPost?.documentId === parentDocumentId) {
-        patchState(store, {
-          currentPost: {
-            ...currPost,
-            commentsTotal: (currPost.commentsTotal ?? 0) + 1,
-          },
+        store._currentPostResource.set({
+          ...currPost,
+          commentsTotal: (currPost.commentsTotal ?? 0) + 1,
         });
       }
     },
   })),
+  withMethods((store) => {
+    const postApi = inject(PostApi);
+
+    const fetchPosts = rxMethod<{ query: PostsQuery; params: TableLoadParams }>(
+      pipe(
+        tap(() => store.setPostsLoading(true)),
+        switchMap(({ query, params }) =>
+          postApi
+            .getPosts(params, query.parentDocumentId, query.authorDocumentId)
+            .pipe(
+              tap((posts) => {
+                store.addPosts(posts);
+                store.setPostsLoading(false);
+              }),
+              catchError(() => {
+                store.setPostsLoading(false);
+                return EMPTY;
+              }),
+            ),
+        ),
+      ),
+    );
+
+    return {
+      loadPosts(query: PostsQuery) {
+        store.resetPostsLoadParams();
+        store.resetPosts();
+        fetchPosts({ query, params: store.posts().lastLoadParams });
+      },
+      loadMorePosts(query: PostsQuery) {
+        if (!store.hasMorePosts() || store.posts.isLoading()) return;
+        const params = store.posts().lastLoadParams;
+        fetchPosts({ query, params: { ...params, page: params.page + 1 } });
+      },
+    };
+  }),
 );
