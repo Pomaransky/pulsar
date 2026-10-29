@@ -106,7 +106,7 @@ export class UserApiService extends ApiService {
   }
 
   getUser(id: string): Observable<User> {
-    return this.get<User>(`users/${id}?populate=role`);
+    return this.get<User>(`users/${id}?populate=role&populate=avatar`);
   }
 
   updateUserBan(userId: string, ban: UserBanUpdate): Observable<User> {

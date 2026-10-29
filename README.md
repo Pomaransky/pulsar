@@ -4,11 +4,12 @@ A platform for publishing posts and comments. Users can create posts, browse the
 #### Demo: https://pulsar-app.netlify.app/
 #### The demo backend runs on a free server that goes to sleep when idle. The first load may take up to a minute, thanks for your patience.
 Test admin credentials:
-Username: **admin**
-Password: **zaq1@WSX**
+- Username: **admin**
+- Password: **zaq1@WSX**
+
 Test user credentials:
-Username/Email: **userExample** or **userexample@email.com**
-Password: **zaq1@WSX**
+- Username/Email: **userExample** or **userexample@email.com**
+- Password: **zaq1@WSX**
 
 #### To develop locally:
 
