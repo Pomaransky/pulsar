@@ -6,7 +6,7 @@ services:
     region: frankfurt
     rootDir: strapi
     buildCommand: npm ci && npm run build
-    startCommand: npm run start
+    startCommand: NODE_OPTIONS=--max-old-space-size=460 npm run start
     healthCheckPath: /_health
     envVars:
       - key: NODE_VERSION
@@ -14,7 +14,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: NODE_OPTIONS
-        value: --max-old-space-size=460
+        value: --max-old-space-size=3072
       - key: APP_KEYS
         generateValue: true
       - key: API_TOKEN_SALT
