@@ -58,7 +58,7 @@
     "noAccount": "Nie masz konta?",
     "register": "Zarejestruj się",
     "privacyPolicy": "Polityka prywatności",
-    "demoAppInfo": "Projekt demonstracyjny Strapi Cloud (backend) jest tymczasowo niedostępny, ponieważ wygasł bezpłatny plan Strapi Cloud."
+    "demoAppInfo": "Backend wersji demo działa na darmowym serwerze, który usypia się po okresie bezczynności. Pierwsze uruchomienie może potrwać do minuty, dziękuję za cierpliwość."
   },
   "register": {
     "username": "Nazwa użytkownika",

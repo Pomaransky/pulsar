@@ -58,7 +58,7 @@
     "noAccount": "Don't have an account?",
     "register": "Register",
     "privacyPolicy": "Privacy Policy",
-    "demoAppInfo": "The Strapi Cloud demo project (backend) is temporarily unavailable because the free Strapi Cloud plan has expired."
+    "demoAppInfo": "The demo backend runs on a free server that goes to sleep when idle. The first load may take up to a minute, thanks for your patience."
   },
   "register": {
     "username": "Username",
