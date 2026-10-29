@@ -125,6 +125,9 @@ async function setupDefaultRolesAndPermissions() {
     'api::post.post.find',
     'api::post.post.findOne',
     'api::post.post.create',
+    // Upload
+    'plugin::upload.content-api.upload',
+    'plugin::upload.content-api.destroy',
     // Like
     'api::like.like.toggle',
     'api::like.like.status',
@@ -160,10 +163,18 @@ async function setupDefaultRolesAndPermissions() {
     'plugin::users-permissions.user.me',
     'plugin::users-permissions.user.update',
     'plugin::users-permissions.user.updateMe',
+    // Post
+    'api::post.post.find',
+    'api::post.post.findOne',
+    'api::post.post.create',
+    // Upload
+    'plugin::upload.content-api.upload',
+    'plugin::upload.content-api.destroy',
     // Like
     'api::like.like.toggle',
     'api::like.like.status',
     // Analytics
+    'api::analytics-event.analytics-event.track',
     'api::analytics-event.analytics-event.find',
     'api::analytics-event.analytics-event.findOne',
     'api::analytics-counter.analytics-counter.find',
