@@ -62,21 +62,19 @@ async function resolvePostAuthor(
 }
 
 async function updateLikesTotal(
-  strapi: { documents: Function },
+  strapi: { db: { query: Function } },
   postDocumentId: string,
   delta: number,
 ): Promise<number> {
-  const postDoc = (await strapi.documents(POST_UID).findOne({
-    documentId: postDocumentId,
-    status: 'published',
-    fields: ['likesTotal'],
+  const postRow = (await strapi.db.query(POST_UID).findOne({
+    where: { documentId: postDocumentId, publishedAt: { $notNull: true } },
+    select: ['likesTotal'],
   })) as PostEntity | null;
-  const current = Number(postDoc?.likesTotal ?? 0) || 0;
+  const current = Number(postRow?.likesTotal ?? 0) || 0;
   const next = Math.max(0, current + delta);
 
-  await strapi.documents(POST_UID).update({
-    documentId: postDocumentId,
-    status: 'published',
+  await strapi.db.query(POST_UID).updateMany({
+    where: { documentId: postDocumentId },
     data: { likesTotal: next },
   });
 
