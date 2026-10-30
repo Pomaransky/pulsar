@@ -1,8 +1,15 @@
 # Pulsar (still under development - new features etc.)
-A platform for publishing posts and comments. Users can create posts, browse the feed on the home page, and open individual posts with a paginated list of comments. Admin can view and block users. The app supports a light/dark theme and multiple languages with ngx-translate and PrimeNG locale.
+A full-stack social platform for publishing posts and comments, with an admin panel for user moderation.
+
+#### Tech stack:
+- **Monorepo:** `/frontend` (Angular) and `/strapi` (Strapi backend)
+- **Frontend:** Angular 22 (standalone components, Angular Signals, zoneless change detection), NgRx Signal Store, RxJS, PrimeNG 22, Tailwind, ngx-translate, date-fns
+- **Backend:** Strapi 5, PostgreSQL (Neon)
+- **Hosting:** Render (backend, migrated from Strapi Cloud), Netlify (frontend), Cloudinary (media)
+- **Testing:** Karma, Jasmine
 
 #### Demo: https://pulsar-app.netlify.app/
-#### The demo backend runs on a free server that goes to sleep when idle. The first load may take up to a minute, thanks for your patience.
+#### The demo backend runs on a free server that goes to sleep when idle. The first load may take up to 2 minutes, thanks for your patience.
 Test admin credentials:
 - Username: **admin**
 - Password: **zaq1@WSX**
@@ -10,6 +17,13 @@ Test admin credentials:
 Test user credentials:
 - Username/Email: **userExample** or **userexample@email.com**
 - Password: **zaq1@WSX**
+
+#### Features:
+- Publishing posts and comments with media attachments, likes and paginated feeds
+- Role-based access control with an admin panel for user management and moderation
+- User moderation system with permanent bans, time-based bans and shadow bans for content visibility control
+- Light/dark theme switching
+- Multi-language support with ngx-translate and PrimeNG locale
 
 #### To develop locally:
 
