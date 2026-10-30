@@ -211,6 +211,18 @@ export default {
       return next();
     });
 
+    const updateCommentsTotal = async (documentId: string, delta: number) => {
+      const postRow = await strapi.db.query('api::post.post').findOne({
+        where: { documentId, publishedAt: { $notNull: true } },
+        select: ['commentsTotal'],
+      }) as { commentsTotal?: number | string } | null;
+      const current = Number(postRow?.commentsTotal ?? 0) || 0;
+      await strapi.db.query('api::post.post').updateMany({
+        where: { documentId },
+        data: { commentsTotal: Math.max(0, current + delta) },
+      });
+    };
+
     strapi.documents.use(async (context, next) => {
       if (context.uid !== 'api::post.post') return next();
       const isCreate = context.action === 'create';
@@ -256,32 +268,12 @@ export default {
                 : null;
           const parent = parentFromPayload ?? parentFromResult;
           if (parent) {
-            const parentDoc = await strapi.documents('api::post.post').findOne({
-              documentId: parent,
-              status: 'published',
-              fields: ['commentsTotal'],
-            }) as unknown as { commentsTotal?: number | string } | null;
-            const current = Number(parentDoc?.commentsTotal ?? 0) || 0;
-            await strapi.documents('api::post.post').update({
-              documentId: parent,
-              status: 'published',
-              data: { commentsTotal: current + 1 },
-            });
+            await updateCommentsTotal(parent, 1);
           }
         }
 
         if (isDelete && parentDocumentId) {
-          const parentDoc = await strapi.documents('api::post.post').findOne({
-            documentId: parentDocumentId,
-            status: 'published',
-            fields: ['commentsTotal'],
-          }) as unknown as { commentsTotal?: number | string } | null;
-          const current = Number(parentDoc?.commentsTotal ?? 0) || 0;
-          await strapi.documents('api::post.post').update({
-            documentId: parentDocumentId,
-            status: 'published',
-            data: { commentsTotal: Math.max(0, current - 1) },
-          });
+          await updateCommentsTotal(parentDocumentId, -1);
         }
       } catch (e) {
         strapi.log.warn('Post middleware: could not update commentsTotal', e);
