@@ -25,7 +25,6 @@ import { ModalService } from '../../services/modal.service';
   imports: [ReactiveFormsModule, ButtonModule, InputField, MessageModule, CardModule, DividerModule, Settings, TranslateModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login implements OnInit {
   private authService = inject(AuthService);

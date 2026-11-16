@@ -7,6 +7,5 @@ import { ButtonModule } from 'primeng/button';
   imports: [ConfirmDialogModule, ButtonModule],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialog {}

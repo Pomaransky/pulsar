@@ -21,7 +21,6 @@ import { Settings } from '../../../../components/settings/settings';
   imports: [Settings, TranslateModule, ButtonModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header implements OnInit {
   private router = inject(Router);

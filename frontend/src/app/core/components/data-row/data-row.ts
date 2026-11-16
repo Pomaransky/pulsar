@@ -5,7 +5,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   imports: [],
   templateUrl: './data-row.html',
   styleUrl: './data-row.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataRow {
   @Input({ required: true }) label = '';

@@ -6,7 +6,6 @@ import { User } from '../../models';
   imports: [],
   templateUrl: './avatar.html',
   styleUrl: './avatar.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Avatar {
   @Input() userData: User | null = null;

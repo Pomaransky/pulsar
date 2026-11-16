@@ -46,7 +46,6 @@ import { ModalService } from '../../services/modal.service';
   ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Register implements OnInit {
   private authService = inject(AuthService);

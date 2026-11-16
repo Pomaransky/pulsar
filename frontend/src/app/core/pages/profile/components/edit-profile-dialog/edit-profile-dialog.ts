@@ -34,7 +34,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './edit-profile-dialog.html',
   styleUrl: './edit-profile-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditProfileDialog {
   private userApiService = inject(UserApiService);
