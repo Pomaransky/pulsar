@@ -18,7 +18,6 @@ import { Spinner } from '../spinner/spinner';
   imports: [PostCard, Spinner, InfiniteScrollDirective, TranslateModule],
   templateUrl: './posts-list.html',
   styleUrl: './posts-list.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostsList implements OnInit, OnChanges {
   @Input() parentDocumentId: string | undefined = undefined;

@@ -17,7 +17,6 @@ import { PageTitle } from '../../constants';
   imports: [TableModule, TagModule, Table, DetailsDialog, ApplyBanDialog],
   templateUrl: './users.html',
   styleUrl: './users.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UsersStore],
 })
 export class Users implements OnInit {

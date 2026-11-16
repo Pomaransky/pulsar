@@ -16,7 +16,6 @@ type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right';
   imports: [DialogModule, ButtonModule, TranslateModule],
   templateUrl: './dialog.html',
   styleUrl: './dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Dialog {
   @Input() visible = false;

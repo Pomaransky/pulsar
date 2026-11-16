@@ -48,7 +48,6 @@ import { ProfileTabs } from './components/profile-tabs/profile-tabs';
   ],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Profile implements OnInit {
   private userStore = inject(UserStore);

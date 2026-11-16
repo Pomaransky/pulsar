@@ -36,7 +36,6 @@ import { TranslateModule } from '@ngx-translate/core';
   ],
   templateUrl: './post-card.html',
   styleUrl: './post-card.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostCard {
   private router = inject(Router);

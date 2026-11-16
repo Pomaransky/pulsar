@@ -9,7 +9,6 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [TagModule, DatePipe, TranslateModule],
   templateUrl: './table-cell.html',
   styleUrl: './table-cell.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableCell {
   @Input({ required: true }) value!: string | Date | undefined | null;

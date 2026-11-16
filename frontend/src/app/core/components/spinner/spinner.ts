@@ -6,7 +6,6 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   imports: [ProgressSpinnerModule],
   templateUrl: './spinner.html',
   styleUrl: './spinner.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Spinner {
   @Input() loadingText!: string;
