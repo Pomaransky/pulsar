@@ -1,12 +1,6 @@
-// Custom p-button styles showcase
-p-button {
-  .p-button.linkBtn {
-    padding: 0;
-    font-size: 0.875rem;
-    border: 0;
-
-    .pi::before {
-      font-size: 0.875rem;
-    }
-  }
+.p-button.linkBtn {
+  padding: 0;
+  border: 0;
+  font-size: 0.875rem;
+  --p-button-icon-size: 0.875rem;
 }

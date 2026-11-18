@@ -1,48 +1,49 @@
 import { AuthService } from './../../services/auth-service';
 import { AnalyticsService } from '../../services/analytics-service';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
-import { FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { LoginCredentials } from '../../models/auth';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
-import { catchError, finalize } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { PageTitle, AnalyticsEventType, AppRoutePath, ModalType } from '../../constants';
 import { Settings } from '../../components/settings/settings';
-import { InputField } from '../../components';
 import { TranslateModule } from '@ngx-translate/core';
-import { LOGIN_FORM_VALIDATIONS } from './constants/login-form-validations.const';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalService } from '../../services/modal.service';
+import { form, required, FormField, minLength, submit } from '@angular/forms/signals'
+import { InputTextModule } from 'primeng/inputtext';
+import { InputPasswordModule } from 'primeng/inputpassword';
+import { InputFieldSignalForms } from '../../components/input-field-signal-forms/input-field-signal-forms';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ButtonModule, InputField, MessageModule, CardModule, DividerModule, Settings, TranslateModule],
+  imports: [ReactiveFormsModule, ButtonModule, FormField, MessageModule, CardModule, DividerModule, Settings, TranslateModule, InputTextModule, InputPasswordModule, InputFieldSignalForms ],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login implements OnInit {
   private authService = inject(AuthService);
   private analyticsService = inject(AnalyticsService);
-  private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private titleService = inject(Title);
   private destroyRef = inject(DestroyRef);
   private modalService = inject(ModalService);
 
-  loginForm!: FormGroup;
-  validations = LOGIN_FORM_VALIDATIONS;
-  isLoading = false;
-  errorMessage = '';
-
-  constructor() {
-    this.initLoginForm();
-  }
+  loginFormModel = signal<LoginCredentials>({
+    identifier: '',
+    password: ''
+  })
+  loginForm = form(this.loginFormModel, (fieldPath) => {
+    required(fieldPath.identifier, { message: 'login.emailOrUsernameRequired' });
+    required(fieldPath.password, { message: 'login.passwordRequired' });
+    minLength(fieldPath.password, 8, { message: 'login.passwordMinLength' });
+  });
 
   ngOnInit(): void {
     this.titleService.setTitle(PageTitle.PULSAR_LOGIN);
@@ -53,33 +54,25 @@ export class Login implements OnInit {
     this.analyticsService.track(AnalyticsEventType.PAGE_VIEW_LOGIN).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
   }
 
-  private initLoginForm(): void {
-    this.loginForm = new FormGroup({
-      identifier: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+  async onLogin(event: Event): Promise<void> {
+    event.preventDefault();
+
+    await submit(this.loginForm, async (f) => {
+      try {
+        await firstValueFrom(this.authService.login(f().value()));
+        return undefined; // Succsess
+      } catch (err: any) {
+        console.log(err)
+        // throwError from AuthService
+        return [
+          {
+            field: f, // Form-wide error
+            kind: 'auth',
+            message: err.message || 'login.loginError',
+          },
+        ];
+      }
     });
-  }
-
-  onLogin(): void {
-    if (this.loginForm.valid) {
-      this.errorMessage = '';
-      this.isLoading = true;
-      const credentials: LoginCredentials = this.loginForm.value;
-
-      this.authService
-        .login(credentials)
-        .pipe(
-          catchError(error => {
-            this.errorMessage = error.message;
-            return of(null);
-          }),
-          finalize(() => {
-            this.isLoading = false;
-            this.cdr.detectChanges();
-          })
-        )
-        .subscribe();
-    }
   }
 
   onRegister(): void {
