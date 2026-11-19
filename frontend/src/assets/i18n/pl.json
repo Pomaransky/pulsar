@@ -59,7 +59,7 @@
     "register": "Zarejestruj się",
     "privacyPolicy": "Polityka prywatności",
     "demoAppInfo": "Backend wersji demo działa na darmowym serwerze, który usypia się po okresie bezczynności. Pierwsze uruchomienie może potrwać do minuty, dziękuję za cierpliwość.",
-    "loginError":"Błąd logowania"
+    "loginError": "Błąd logowania"
   },
   "register": {
     "username": "Nazwa użytkownika",
@@ -73,7 +73,8 @@
     "register": "Zarejestruj się",
     "haveAccount": "Masz już konto?",
     "login": "Zaloguj się",
-    "privacyPolicy": "Polityka prywatności"
+    "privacyPolicy": "Polityka prywatności",
+    "registerError": "Błąd rejestracji"
   },
   "registerValidations": {
     "usernameRequired": "Nazwa użytkownika jest wymagana",
@@ -220,6 +221,19 @@
     "search": "Szukaj..."
   },
   "primeng": {
-    "monthNames": ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
+    "monthNames": [
+      "Styczeń",
+      "Luty",
+      "Marzec",
+      "Kwiecień",
+      "Maj",
+      "Czerwiec",
+      "Lipiec",
+      "Sierpień",
+      "Wrzesień",
+      "Październik",
+      "Listopad",
+      "Grudzień"
+    ]
   }
 }

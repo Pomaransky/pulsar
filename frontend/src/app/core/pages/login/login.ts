@@ -1,14 +1,12 @@
 import { AuthService } from './../../services/auth-service';
 import { AnalyticsService } from '../../services/analytics-service';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
 
 import { LoginCredentials } from '../../models/auth';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
 import { CardModule } from 'primeng/card';
-import { DividerModule } from 'primeng/divider';
-import { firstValueFrom, of } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { PageTitle, AnalyticsEventType, AppRoutePath, ModalType } from '../../constants';
@@ -17,13 +15,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ModalService } from '../../services/modal.service';
 import { form, required, FormField, minLength, submit } from '@angular/forms/signals'
-import { InputTextModule } from 'primeng/inputtext';
-import { InputPasswordModule } from 'primeng/inputpassword';
 import { InputFieldSignalForms } from '../../components/input-field-signal-forms/input-field-signal-forms';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, ButtonModule, FormField, MessageModule, CardModule, DividerModule, Settings, TranslateModule, InputTextModule, InputPasswordModule, InputFieldSignalForms ],
+  imports: [ButtonModule, FormField, MessageModule, CardModule, Settings, TranslateModule, InputFieldSignalForms],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
