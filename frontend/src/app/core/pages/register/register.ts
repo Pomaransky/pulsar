@@ -1,27 +1,17 @@
 import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
-import {
-  Validators,
-  FormGroup,
-  ReactiveFormsModule,
-  FormControl,
-} from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { MessageModule } from 'primeng/message';
-import { passwordMatchValidator } from '../../directives/password-match-directive';
 import { RegisterCredentials } from '../../models';
-import { catchError, finalize, of } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../services/auth-service';
 import { AnalyticsService } from '../../services/analytics-service';
 import { Router } from '@angular/router';
-import { REGISTER_VALIDATIONS } from './constants/register-form-validations.const';
-import { InputField } from '../../components';
 import { Title } from '@angular/platform-browser';
 import { TranslateModule } from '@ngx-translate/core';
 import {
@@ -32,38 +22,57 @@ import {
 } from '../../constants';
 import { Settings } from '../../components/settings/settings';
 import { ModalService } from '../../services/modal.service';
+import { email, form, FormField, minLength, pattern, required, submit } from '@angular/forms/signals';
+import { fieldsMatchValidator } from '../../validators/fields-match.validator';
+import { InputFieldSignalForms } from '../../components/input-field-signal-forms/input-field-signal-forms';
+
+interface RegisterForm {
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
 
 @Component({
   selector: 'app-register',
   imports: [
-    ReactiveFormsModule,
     CardModule,
     ButtonModule,
     MessageModule,
-    InputField,
     TranslateModule,
     Settings,
+    InputFieldSignalForms,
+    FormField
   ],
   templateUrl: './register.html',
   styleUrl: './register.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Register implements OnInit {
   private authService = inject(AuthService);
   private analyticsService = inject(AnalyticsService);
-  private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   private titleService = inject(Title);
   private modalService = inject(ModalService);
 
-  registerForm!: FormGroup;
-  isLoading = false;
-  errorMessage = '';
-  validations = REGISTER_VALIDATIONS;
-
-  constructor() {
-    this.initRegisterForm();
-  }
+  registerFormModel = signal<RegisterForm>({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  })
+  registerForm = form(this.registerFormModel, (schemaPath) => {
+    required(schemaPath.username, { message: 'registerValidations.usernameRequired' });
+    required(schemaPath.email, { message: 'registerValidations.emailRequired' });
+    email(schemaPath.email, { message: 'registerValidations.invalidEmail' });
+    required(schemaPath.password, { message: 'registerValidations.passwordRequired' });
+    minLength(schemaPath.password, 8, { message: 'registerValidations.passwordMinLength' });
+    pattern(schemaPath.password, /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/, { message: 'registerValidations.passwordPattern' });
+    required(schemaPath.confirmPassword, { message: 'registerValidations.confirmPasswordRequired' });
+    fieldsMatchValidator(schemaPath.confirmPassword, schemaPath.password, {
+      kind: 'passwordMismatch',
+      message: 'Passwords dont match'
+    })
+  });
 
   ngOnInit(): void {
     this.titleService.setTitle(PageTitle.PULSAR_REGISTER);
@@ -72,50 +81,30 @@ export class Register implements OnInit {
       .subscribe();
   }
 
-  private initRegisterForm(): void {
-    this.registerForm = new FormGroup(
-      {
-        username: new FormControl('', [Validators.required]),
-        email: new FormControl('', [Validators.required, Validators.email]),
-        password: new FormControl('', [
-          Validators.required,
-          Validators.minLength(8),
-          Validators.pattern(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*$/,
-          ),
-        ]),
-        confirmPassword: new FormControl('', [Validators.required]),
-      },
-      {
-        validators: passwordMatchValidator,
-      },
-    );
-  }
+  async onRegister(event: Event): Promise<void> {
+    event.preventDefault();
 
-  onRegister(): void {
-    if (this.registerForm.valid) {
-      this.errorMessage = '';
-      this.isLoading = true;
-      const credentials: RegisterCredentials = {
-        username: this.registerForm.value.username,
-        email: this.registerForm.value.email,
-        password: this.registerForm.value.password,
-      };
+    await submit(this.registerForm, async (f) => {
+      try {
+        const formValue = f().value();
+        const credentials: RegisterCredentials = {
+          username: formValue.username,
+          email: formValue.email,
+          password: formValue.password,
+        };
 
-      this.authService
-        .register(credentials)
-        .pipe(
-          catchError((error) => {
-            this.errorMessage = error.message;
-            return of(null);
-          }),
-          finalize(() => {
-            this.isLoading = false;
-            this.cdr.detectChanges();
-          }),
-        )
-        .subscribe();
-    }
+        await firstValueFrom(this.authService.register(credentials));
+        return undefined;
+      } catch (err) {
+        return [
+          {
+            field: f,
+            kind: 'auth',
+            message: err instanceof Error && err.message || 'register.registerError',
+          },
+        ];
+      }
+    });
   }
 
   onLogin(): void {

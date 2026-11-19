@@ -1,87 +1,48 @@
 <app-settings class="absolute top-4 right-4" />
 <div class="flex justify-center items-center h-screen">
-  <p-card class="p-6 pb-0 sm:w-[400px]">
+  <p-card class="p-6 pb-0 w-full max-w-[400px]">
     <ng-template #header>
       <div class="flex flex-col items-center justify-center">
         <img src="/logo_big.svg" alt="Pulsar" class="w-40" />
       </div>
     </ng-template>
     <ng-template #content>
-      <form
-        [formGroup]="registerForm"
-        (ngSubmit)="onRegister()"
-        class="flex flex-col gap-4"
-      >
-        <app-input-field
-          [label]="'register.username' | translate"
-          inputId="username"
-          formControlName="username"
-          [placeholder]="'register.usernamePlaceholder' | translate"
-          [validationMessages]="validations.username"
-        />
+      <form (submit)="onRegister($event)" class="flex flex-col gap-4">
+        <app-input-field-signal-forms [formField]="registerForm.username" label="register.username" />
+        <app-input-field-signal-forms [formField]="registerForm.email" label="register.email" />
+        <app-input-field-signal-forms [formField]="registerForm.password" type="password" label="register.password" />
+        <app-input-field-signal-forms [formField]="registerForm.confirmPassword" type="password"
+          label="register.confirmPassword" />
 
-        <app-input-field
-          [label]="'register.email' | translate"
-          inputId="email"
-          type="email"
-          formControlName="email"
-          [placeholder]="'register.emailPlaceholder' | translate"
-          [validationMessages]="validations.email"
-        />
-
-        <app-input-field
-          [label]="'register.password' | translate"
-          inputId="password"
-          type="password"
-          formControlName="password"
-          [placeholder]="'register.passwordPlaceholder' | translate"
-          [validationMessages]="validations.password"
-        />
-
-        <app-input-field
-          [label]="'register.confirmPassword' | translate"
-          inputId="confirmPassword"
-          type="password"
-          formControlName="confirmPassword"
-          [placeholder]="'register.confirmPasswordPlaceholder' | translate"
-          [validationMessages]="validations.confirmPassword"
-        />
-
-        <p-button
-          type="submit"
-          [disabled]="registerForm.invalid || isLoading"
-          [loading]="isLoading"
-          [label]="'register.register' | translate"
-          styleClass="w-full p-button-lg"
-          icon="pi pi-user-plus"
-        ></p-button>
-
-        @if (errorMessage) {
-          <div class="mt-5">
-            <p-message severity="error" class="max-w-full">{{ errorMessage }}</p-message>
-          </div>
+        <button pButton type="submit" size="large" class="w-full"
+          [disabled]="registerForm().invalid() || registerForm().submitting()">
+          @if (registerForm().submitting()) {
+          <i class="pi pi-spin pi-spinner" pButtonIcon></i>
+          } @else {
+          <i class="pi pi-user-plus" pButtonIcon></i>
+          }
+          <span pButtonLabel>{{ 'register.register' | translate }}</span>
+        </button>
+        @for (error of registerForm().errors(); track error.kind) {
+        <div>
+          <p-message severity="error" class="max-w-full">{{ error.message | translate }}</p-message>
+        </div>
         }
       </form>
     </ng-template>
     <ng-template #footer>
-      <div class="text-sm mt-1 flex flex-col justify-center items-center gap-6">
-        <div>
-          <span class="mr-2">{{ "register.haveAccount" | translate }}</span>
-          <p-button
-            [label]="'register.login' | translate"
-            styleClass="linkBtn p-button-xs"
-            icon="pi pi-sign-in"
-            (click)="onLogin()"
-            link
-          ></p-button>
+      <div class="text-sm mt-1 flex flex-col justify-center items-center gap-4">
+        <div class="">
+          <span class="mr-2 inline">{{ "register.haveAccount" | translate }}</span>
+          <button pButton link (click)="onLogin()" class="linkBtn">
+            <i pButtonIcon class="pi pi-sign-in"></i>
+            <span pButtonLabel>{{ 'register.login' | translate }}</span>
+          </button>
         </div>
-        <p-button
-          [label]="'register.privacyPolicy' | translate"
-          styleClass="linkBtn p-button-xs"
-          icon="pi pi-shield"
-          (click)="openPrivacyPolicy()"
-          link
-        ></p-button>
+        <button pButton link (click)="openPrivacyPolicy()" class="linkBtn">
+          <i pButtonIcon class="pi pi-shield"></i>
+          <span pButtonLabel>{{ 'login.privacyPolicy' | translate }}</span>
+        </button>
       </div>
     </ng-template>
   </p-card>

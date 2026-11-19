@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -32,7 +31,6 @@ interface LanguageOption {
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Settings {
   private appStore = inject(AppStore);

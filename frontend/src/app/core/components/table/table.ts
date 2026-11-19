@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -40,7 +39,6 @@ const SEARCH_DEBOUNCE_MS = 500;
   ],
   templateUrl: './table.html',
   styleUrl: './table.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Table<T = unknown> implements OnChanges, OnInit {
   private destroyRef = inject(DestroyRef);

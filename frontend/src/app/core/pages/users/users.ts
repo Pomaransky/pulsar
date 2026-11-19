@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UsersStore } from '../../store/users.store';
 import { UserApiService } from '../../services/user-api-service';
 import { TableModule } from 'primeng/table';
@@ -17,7 +17,6 @@ import { PageTitle } from '../../constants';
   imports: [TableModule, TagModule, Table, DetailsDialog, ApplyBanDialog],
   templateUrl: './users.html',
   styleUrl: './users.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [UsersStore],
 })
 export class Users implements OnInit {

@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   effect,
@@ -36,7 +35,6 @@ import { ButtonModule } from 'primeng/button';
   ],
   templateUrl: './post.html',
   styleUrl: './post.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Post implements OnInit, OnDestroy {
   private postsStore = inject(PostsStore);

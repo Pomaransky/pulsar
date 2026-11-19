@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -32,7 +31,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './change-password-dialog.html',
   styleUrl: './change-password-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangePasswordDialog implements OnInit {
   private authService = inject(AuthService);

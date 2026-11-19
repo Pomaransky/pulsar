@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -6,6 +6,5 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [TranslateModule],
   templateUrl: './privacy-policy-content.html',
   styleUrl: './privacy-policy-content.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrivacyPolicyContent {}

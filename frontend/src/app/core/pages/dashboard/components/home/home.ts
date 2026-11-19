@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -20,7 +19,6 @@ import { PageTitle } from '../../../../constants';
   imports: [ButtonModule, PostForm, PostsList],
   templateUrl: './home.html',
   styleUrl: './home.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home implements OnInit {
   private postService = inject(PostApi);

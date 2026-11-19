@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { TabsModule } from 'primeng/tabs';
 import { PostsList } from '../../../../components';
@@ -10,7 +10,6 @@ import { TooltipModule } from 'primeng/tooltip';
   imports: [TabsModule, TranslateModule, PostsList, TooltipModule],
   templateUrl: './profile-tabs.html',
   styleUrl: './profile-tabs.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileTabs {
   private userStore = inject(UserStore);

@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -27,7 +26,6 @@ import { ButtonModule } from 'primeng/button';
   ],
   templateUrl: './details-dialog.html',
   styleUrl: './details-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsDialog {
   private userApiService = inject(UserApiService);

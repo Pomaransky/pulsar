@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   inject,
   OnInit,
@@ -34,7 +33,6 @@ import { Spinner } from '../../../../components';
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(window:resize)': 'checkWindowDimensions()',
   },

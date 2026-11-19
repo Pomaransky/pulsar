@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   inject,
   Input,
@@ -46,7 +45,6 @@ export const ACCEPT_FILE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
   ],
   templateUrl: './post-form.html',
   styleUrl: './post-form.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PostForm {
   private fb = inject(FormBuilder);

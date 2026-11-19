@@ -1,73 +1,50 @@
 <app-settings class="absolute top-4 right-4" />
 <div class="flex justify-center items-center h-screen">
-  <p-card class="p-6 pb-0 sm:w-[400px]">
+  <p-card class="p-6 pb-0 w-full max-w-[400px]">
     <ng-template #header>
       <div class="flex flex-col items-center justify-center">
         <img src="/logo_big.svg" alt="Pulsar" class="w-40" />
       </div>
     </ng-template>
     <ng-template #content>
-      <form
-        [formGroup]="loginForm"
-        (ngSubmit)="onLogin()"
-        class="flex flex-col gap-4"
-      >
-        <app-input-field
-          [label]="'login.emailOrUsername' | translate"
-          inputId="identifier"
-          formControlName="identifier"
-          type="text"
-          [validationMessages]="validations.identifier"
-        />
+      <form (submit)="onLogin($event)" class="flex flex-col gap-4">
+        <app-input-field-signal-forms [formField]="loginForm.identifier" label="login.emailOrUsername" />
+        <app-input-field-signal-forms [formField]="loginForm.password" type="password" label="login.password" />
 
-        <app-input-field
-          [label]="'login.password' | translate"
-          inputId="password"
-          formControlName="password"
-          type="password"
-          [feedback]="false"
-          [validationMessages]="validations.password"
-        />
+        <button pButton type="submit" size="large" class="w-full"
+          [disabled]="loginForm().invalid() || loginForm().submitting()">
+          @if (loginForm().submitting()) {
+          <i class="pi pi-spin pi-spinner" pButtonIcon></i>
+          } @else {
+          <i class="pi pi-sign-in" pButtonIcon></i>
+          }
+          <span pButtonLabel>{{ 'login.title' | translate }}</span>
+        </button>
 
-        <p-button
-          type="submit"
-          [disabled]="loginForm.invalid || isLoading"
-          [loading]="isLoading"
-          [label]="'login.signIn' | translate"
-          styleClass="w-full p-button-lg"
-          icon="pi pi-sign-in"
-        ></p-button>
-
-        @if (errorMessage) {
-          <div class="mt-5">
-            <p-message severity="error" class="max-w-full">{{ errorMessage }}</p-message>
-          </div>
+        @for (error of loginForm().errors(); track error.kind) {
+        <div>
+          <p-message severity="error" class="max-w-full">{{ error.message | translate }}</p-message>
+        </div>
         }
       </form>
     </ng-template>
     <ng-template #footer>
-      <div class="text-sm mt-1 flex flex-col justify-center items-center gap-6">
-        <div>
-          <span class="mr-2">{{ "login.noAccount" | translate }}</span>
-          <p-button
-            [label]="'login.register' | translate"
-            styleClass="linkBtn p-button-xs"
-            icon="pi pi-user-plus"
-            (click)="onRegister()"
-            link
-          ></p-button>
+      <div class="text-sm mt-1 flex flex-col justify-center items-center gap-4">
+        <div class="">
+          <span class="mr-2 inline">{{ "login.noAccount" | translate }}</span>
+          <button pButton link (click)="onRegister()" class="linkBtn">
+            <i pButtonIcon class="pi pi-user-plus"></i>
+            <span pButtonLabel>{{ 'login.register' | translate }}</span>
+          </button>
         </div>
         <div class="text-sm italic text-center">
           <i class="pi pi-exclamation-triangle mr-1"></i>
           {{ "login.demoAppInfo" | translate }}
         </div>
-        <p-button
-          [label]="'login.privacyPolicy' | translate"
-          styleClass="linkBtn p-button-xs"
-          icon="pi pi-shield"
-          (click)="openPrivacyPolicy()"
-          link
-        ></p-button>
+        <button pButton link (click)="openPrivacyPolicy()" class="linkBtn">
+          <i pButtonIcon class="pi pi-shield"></i>
+          <span pButtonLabel>{{ 'login.privacyPolicy' | translate }}</span>
+        </button>
       </div>
     </ng-template>
   </p-card>

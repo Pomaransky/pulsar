@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ButtonModule } from 'primeng/button';
 
@@ -7,6 +7,5 @@ import { ButtonModule } from 'primeng/button';
   imports: [ConfirmDialogModule, ButtonModule],
   templateUrl: './confirm-dialog.html',
   styleUrl: './confirm-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialog {}

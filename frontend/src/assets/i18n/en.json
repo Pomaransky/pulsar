@@ -53,12 +53,13 @@
     "password": "Password",
     "passwordPlaceholder": "Enter your password",
     "passwordRequired": "Password is required",
-    "passwordMinLength": "Password must be at least 6 characters",
-    "signIn": "Sign In",
+    "passwordMinLength": "Password must be at least 8 characters",
+    "title": "Log in",
     "noAccount": "Don't have an account?",
     "register": "Register",
     "privacyPolicy": "Privacy Policy",
-    "demoAppInfo": "The demo backend runs on a free server that goes to sleep when idle. The first load may take up to a minute, thanks for your patience."
+    "demoAppInfo": "The demo backend runs on a free server that goes to sleep when idle. The first load may take up to a minute, thanks for your patience.",
+    "loginError": "Log in error"
   },
   "register": {
     "username": "Username",
@@ -71,8 +72,9 @@
     "confirmPasswordPlaceholder": "Confirm your password",
     "register": "Register",
     "haveAccount": "Already have an account?",
-    "login": "Login",
-    "privacyPolicy": "Privacy Policy"
+    "login": "Log in",
+    "privacyPolicy": "Privacy Policy",
+    "registerError": "Register error"
   },
   "registerValidations": {
     "usernameRequired": "Username is required",
@@ -85,12 +87,12 @@
     "passwordsMismatch": "Passwords do not match"
   },
   "sidebar": {
-    "logout": "Logout"
+    "logout": "Log out"
   },
   "confirmDialog": {
     "confirmLogout": "Confirm logout",
     "confirmLogoutMessage": "Are you sure you want to logout?",
-    "logout": "Logout"
+    "logout": "Log out"
   },
   "profile": {
     "documentId": "Document ID",
@@ -218,6 +220,19 @@
     "search": "Search..."
   },
   "primeng": {
-    "monthNames": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    "monthNames": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ]
   }
 }

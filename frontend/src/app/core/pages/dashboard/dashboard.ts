@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   inject,
   OnInit,
@@ -18,7 +17,6 @@ import { User } from '../../models/auth/user.model';
   imports: [RouterOutlet, Sidebar, Header, ConfirmDialog],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ConfirmationService],
 })
 export class Dashboard implements OnInit {

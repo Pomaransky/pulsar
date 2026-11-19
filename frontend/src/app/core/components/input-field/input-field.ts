@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
@@ -41,7 +40,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   ],
   templateUrl: './input-field.html',
   styleUrl: './input-field.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputField implements ControlValueAccessor, OnInit {
   private destroyRef = inject(DestroyRef);

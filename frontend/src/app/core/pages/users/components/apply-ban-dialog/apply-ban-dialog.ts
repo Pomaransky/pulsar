@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
@@ -37,7 +36,6 @@ import {
   ],
   templateUrl: './apply-ban-dialog.html',
   styleUrl: './apply-ban-dialog.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ApplyBanDialog implements OnInit {
   private userApiService = inject(UserApiService);

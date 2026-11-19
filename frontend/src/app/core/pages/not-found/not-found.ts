@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -6,6 +6,5 @@ import { TranslateModule } from '@ngx-translate/core';
   imports: [TranslateModule],
   templateUrl: './not-found.html',
   styleUrl: './not-found.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotFound {}
