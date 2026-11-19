@@ -2,17 +2,17 @@
   @if (type() === 'password') {
   <p-iconfield>
     <input pInputPassword [(mask)]="passwordMask" [value]="value()" [disabled]="disabled()"
-      [class.p-invalid]="showError" class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" />
+      [class.p-invalid]="showError" class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()" />
     <p-inputicon [class]="passwordMask ? 'pi pi-eye' : 'pi pi-eye-slash'" class="cursor-pointer"
       (click)="togglePasswordMask()" />
   </p-iconfield>
   } @else {
   <input pInputText [type]="type()" [value]="value()" [disabled]="disabled()" [class.p-invalid]="showError"
-    class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" />
+    class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()" />
   }
 
   @if (label()) {
-  <label>{{ label() | translate }}</label>
+  <label [for]="id()">{{ label() | translate }}</label>
   }
 </p-floatlabel>
 

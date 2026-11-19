@@ -55,7 +55,10 @@ export class AuthService extends ApiService {
         this.router.navigate(['/']);
       }),
       catchError((error) => {
-        return throwError(() => new Error(error.error.error.message));
+        const message =
+          error?.error?.error?.message ||
+          'login.loginError';
+        return throwError(() => new Error(message));
       }),
     );
   }
@@ -71,7 +74,10 @@ export class AuthService extends ApiService {
         this.router.navigate(['/login']);
       }),
       catchError((error) => {
-        return throwError(() => new Error(error.error.error.message));
+        const message =
+          error?.error?.error?.message ||
+          'register.registerError';
+        return throwError(() => new Error(message));
       }),
     );
   }

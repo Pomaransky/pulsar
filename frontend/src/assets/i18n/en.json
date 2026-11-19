@@ -73,7 +73,8 @@
     "register": "Register",
     "haveAccount": "Already have an account?",
     "login": "Log in",
-    "privacyPolicy": "Privacy Policy"
+    "privacyPolicy": "Privacy Policy",
+    "registerError": "Register error"
   },
   "registerValidations": {
     "usernameRequired": "Username is required",

@@ -165,10 +165,20 @@ export const pulsarThemePreset = definePreset(Aura, {
     inputtext: {
       colorScheme: {
         light: {
-          root: primaryColorScheme.light,
+          root: { ...primaryColorScheme.light, invalidBorderColor: '{red.500}' },
         },
         dark: {
-          root: primaryColorScheme.dark,
+          root: { ...primaryColorScheme.dark, invalidBorderColor: '{red.500}' },
+        },
+      },
+    },
+    floatlabel: {
+      colorScheme: {
+        light: {
+          root: { ...primaryColorScheme.light, invalidColor: '{red.500}' },
+        },
+        dark: {
+          root: { ...primaryColorScheme.dark, invalidColor: '{red.500}' },
         },
       },
     },

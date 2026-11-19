@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core';
 import { UsersStore } from '../../store/users.store';
 import { UserApiService } from '../../services/user-api-service';
 import { TableModule } from 'primeng/table';
