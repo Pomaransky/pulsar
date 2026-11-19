@@ -57,14 +57,13 @@ export class Login implements OnInit {
       try {
         await firstValueFrom(this.authService.login(f().value()));
         return undefined; // Succsess
-      } catch (err: any) {
-        console.log(err)
+      } catch (err) {
         // throwError from AuthService
         return [
           {
             field: f, // Form-wide error
             kind: 'auth',
-            message: err.message || 'login.loginError',
+            message: err instanceof Error && err?.message || 'login.loginError',
           },
         ];
       }

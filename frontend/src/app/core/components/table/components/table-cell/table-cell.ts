@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TagModule } from 'primeng/tag';
 import { TableColumnType, UserBanType } from '../../../../models';
 import { TranslateModule } from '@ngx-translate/core';

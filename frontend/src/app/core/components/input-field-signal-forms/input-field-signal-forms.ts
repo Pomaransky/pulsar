@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
+import { Component, input, model } from '@angular/core';
 import { FormValueControl, ValidationError } from '@angular/forms/signals';
 import { TranslateModule } from '@ngx-translate/core';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -11,8 +11,7 @@ import { InputTextModule } from 'primeng/inputtext';
   imports: [InputTextModule, IconFieldModule, InputIconModule, TranslateModule, FloatLabelModule, InputPasswordModule],
   selector: 'app-input-field-signal-forms',
   styleUrl: './input-field-signal-forms.scss',
-  templateUrl: './input-field-signal-forms.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './input-field-signal-forms.html'
 })
 export class InputFieldSignalForms implements FormValueControl<string> {
   // FormValueControl

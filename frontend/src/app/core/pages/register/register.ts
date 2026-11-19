@@ -95,12 +95,12 @@ export class Register implements OnInit {
 
         await firstValueFrom(this.authService.register(credentials));
         return undefined;
-      } catch (err: any) {
+      } catch (err) {
         return [
           {
             field: f,
             kind: 'auth',
-            message: err.message,
+            message: err instanceof Error && err.message || 'register.registerError',
           },
         ];
       }
