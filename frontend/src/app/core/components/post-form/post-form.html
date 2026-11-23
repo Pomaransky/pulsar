@@ -1,71 +1,37 @@
-<form
-  [formGroup]="form"
-  class="w-full flex flex-col gap-2"
-  (ngSubmit)="onSubmit()"
->
+<form class="w-full flex flex-col gap-2" (submit)="onSubmit($event)">
   <div
-    class="post-composer rounded-lg border border-violet-200 dark:border-slate-700 overflow-hidden bg-surface-0 dark:bg-slate-950"
-  >
+    class="post-composer rounded-lg border border-violet-200 dark:border-slate-700 overflow-hidden bg-surface-0 dark:bg-slate-950">
     <div class="post-composer__input relative">
-      <app-input-field
-        [inputId]="inputId"
-        formControlName="content"
-        type="textarea"
-        [rows]="rows"
-        [label]="label | translate"
-        [validationMessages]="validationMessages"
-      />
+      <app-input-field-signal-forms [formField]="postForm.content" type="textarea" [rows]="rows" [label]="label" />
       @if (selectedMedia(); as file) {
-        <div class="relative bg-surface-0 dark:bg-slate-950">
-          <img
-            [src]="previewUrl()"
-            [alt]="file.name"
-            class="w-full h-auto object-cover object-top"
-          />
-          <p-button
-            type="button"
-            icon="pi pi-times"
-            severity="danger"
-            styleClass="p-button-rounded p-button-sm absolute top-1 right-1 shadow"
-            (click)="clearMedia()"
-          />
-        </div>
+      <div class="relative bg-surface-0 dark:bg-slate-950">
+        <img [src]="previewUrl()" [alt]="file.name" class="w-full h-auto object-cover object-top" />
+        <button pButton type="button" severity="danger"
+          class="p-button-rounded p-button-sm absolute top-1 right-1 shadow" (click)="clearMedia()">
+          <i class="pi pi pi-times" pButtonIcon></i></button>
+      </div>
       }
     </div>
-    <p-fileupload
-      #mediaUpload
-      name="postMedia[]"
-      [accept]="acceptFileTypes.join(', ')"
-      [customUpload]="true"
-      (onSelect)="onMediaSelect($event)"
-    >
+    <p-fileupload #mediaUpload name="postMedia[]" [accept]="acceptFileTypes.join(', ')" [customUpload]="true"
+      (onSelect)="onMediaSelect($event)">
       <ng-template #header let-chooseCallback="chooseCallback">
         @if (!selectedMedia(); as file) {
-          <p-button
-            type="button"
-            icon="pi pi-image"
-            severity="secondary"
-            styleClass="p-0 w-auto bg-transparent border-none text-primary"
-            [pTooltip]="'post.attachMultimedia' | translate"
-            tooltipPosition="bottom"
-            tooltipStyleClass="text-xs"
-            (onClick)="chooseCallback()"
-          />
+        <button pButton type="button" variant="text" [pTooltip]="'post.attachMultimedia' | translate"
+          tooltipPosition="bottom" tooltipStyleClass="text-xs" (click)="chooseCallback()">
+          <i class="pi pi pi-image" pButtonIcon></i>
+        </button>
         }
       </ng-template>
-      <ng-template
-        #content
-        let-file
-        let-uploadCallback="uploadCallback"
-      ></ng-template>
+      <ng-template #content let-file let-uploadCallback="uploadCallback"></ng-template>
     </p-fileupload>
   </div>
-
-  <p-button
-    type="submit"
-    [label]="submitLabel | translate"
-    icon="pi pi-send"
-    styleClass="w-full"
-    [disabled]="form.invalid"
-  />
+  <button pButton type="submit" size="large" class="w-full"
+    [disabled]="postForm().invalid() || postForm().submitting()">
+    @if (postForm().submitting()) {
+    <i class="pi pi-spin pi-spinner" pButtonIcon></i>
+    } @else {
+    <i class="pi pi-send" pButtonIcon></i>
+    }
+    <span pButtonLabel>{{ submitLabel | translate }}</span>
+  </button>
 </form>

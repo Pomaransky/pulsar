@@ -6,9 +6,10 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputPasswordModule } from 'primeng/inputpassword';
 import { InputTextModule } from 'primeng/inputtext';
+import { Textarea } from 'primeng/textarea';
 
 @Component({
-  imports: [InputTextModule, IconFieldModule, InputIconModule, TranslateModule, FloatLabelModule, InputPasswordModule],
+  imports: [InputTextModule, IconFieldModule, InputIconModule, TranslateModule, FloatLabelModule, InputPasswordModule, Textarea],
   selector: 'app-input-field-signal-forms',
   styleUrl: './input-field-signal-forms.scss',
   templateUrl: './input-field-signal-forms.html'
@@ -20,6 +21,7 @@ export class InputFieldSignalForms implements FormValueControl<string> {
   readonly disabled = input<boolean>(false);
   readonly invalid = input<boolean>(false);
   readonly errors = input<readonly ValidationError[]>([]);
+  readonly rows = input<number>(3);
 
   private static nextId = 0;
   passwordMask = true;
@@ -27,7 +29,7 @@ export class InputFieldSignalForms implements FormValueControl<string> {
   // UI
   readonly id = input(`app-input-${++InputFieldSignalForms.nextId}`);
   readonly label = input<string>('');
-  readonly type = input<'text' | 'password' | 'email'>('text');
+  readonly type = input<'text' | 'password' | 'email' | 'textarea'>('text');
 
   get showError(): boolean {
     return this.touched() && this.invalid();
