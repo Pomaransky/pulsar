@@ -6,6 +6,10 @@
     <p-inputicon [class]="passwordMask ? 'pi pi-eye' : 'pi pi-eye-slash'" class="cursor-pointer"
       (click)="togglePasswordMask()" />
   </p-iconfield>
+  } @if(type() === 'textarea') {
+  <textarea pTextarea [rows]="rows()" [value]="value()" [disabled]="disabled()"
+    [class.p-invalid]="showError" class="w-full resize-none" (input)="onInput($event)" (blur)="touched.set(true)"
+    [id]="id()"></textarea>
   } @else {
   <input pInputText [type]="type()" [value]="value()" [disabled]="disabled()" [class.p-invalid]="showError"
     class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()" />

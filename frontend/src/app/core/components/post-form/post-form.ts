@@ -6,12 +6,6 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import {
@@ -19,11 +13,10 @@ import {
   FileUpload,
   FileUploadModule,
 } from 'primeng/fileupload';
-import { InputField } from '../input-field/input-field';
-import { ValidationMessage } from '../../models';
 import { FileValidationService } from '../../services/file-validation.service';
-import { POST_VALIDATION_MESSAGES } from '../../pages/dashboard/constants/post-validation-messages.const';
 import { Tooltip } from 'primeng/tooltip';
+import { form, maxLength, FormField, required, submit } from '@angular/forms/signals';
+import { InputFieldSignalForms } from '../input-field-signal-forms/input-field-signal-forms';
 
 export interface PostFormSubmit {
   content: string;
@@ -36,18 +29,17 @@ export const ACCEPT_FILE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
 @Component({
   selector: 'app-post-form',
   imports: [
-    ReactiveFormsModule,
-    InputField,
+    InputFieldSignalForms,
     ButtonModule,
     FileUploadModule,
     TranslateModule,
     Tooltip,
+    FormField
   ],
   templateUrl: './post-form.html',
   styleUrl: './post-form.scss',
 })
 export class PostForm {
-  private fb = inject(FormBuilder);
   private fileValidation = inject(FileValidationService);
 
   @Input() label = 'post.whatsOnYourMind';
@@ -61,21 +53,28 @@ export class PostForm {
   acceptFileTypes = ACCEPT_FILE_TYPES;
 
   submitForm = output<PostFormSubmit>();
-  form: FormGroup = this.fb.group({
-    content: ['', [Validators.required, Validators.maxLength(255)]],
+  postFormModel = signal<PostFormSubmit>({
+    content: '',
+  })
+  postForm = form(this.postFormModel, (schemaPath) => {
+    required(schemaPath.content);
+    maxLength(schemaPath.content, 255, { message: 'postValidations.maxLength' });
   });
-  validationMessages: ValidationMessage[] = POST_VALIDATION_MESSAGES;
   get inputId(): string {
     return this.parentDocumentId ? 'comment-content' : 'post-content';
   }
 
-  onSubmit(): void {
-    const trimmed = this.form.get('content')?.value?.trim();
-    if (!trimmed) return;
-    this.submitForm.emit({
-      content: trimmed,
-      parentDocumentId: this.parentDocumentId ?? undefined,
-      media: this.selectedMedia() ?? undefined,
+  onSubmit(event: Event): void {
+    event.preventDefault();
+
+    submit(this.postForm, async () => {
+      const trimmed = this.postFormModel().content.trim();
+
+      this.submitForm.emit({
+        content: trimmed,
+        parentDocumentId: this.parentDocumentId ?? undefined,
+        media: this.selectedMedia() ?? undefined,
+      });
     });
   }
 
@@ -108,7 +107,7 @@ export class PostForm {
   }
 
   reset(): void {
-    this.form.reset();
+    this.postForm().reset({ content: '' });
     this.clearMedia();
   }
 }
