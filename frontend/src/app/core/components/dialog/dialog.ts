@@ -25,13 +25,13 @@ export class Dialog {
   @Input() showCloseInHeader = false;
   @Input() closeOnEscape = true;
 
-  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() visibilityChange = new EventEmitter<boolean>();
 
-  onVisibleChange(value: boolean): void {
-    this.visibleChange.emit(value);
+  onVisibilityChange(value: boolean): void {
+    this.visibilityChange.emit(value);
   }
 
   close(): void {
-    this.visibleChange.emit(false);
+    this.visibilityChange.emit(false);
   }
 }

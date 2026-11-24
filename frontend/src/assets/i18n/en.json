@@ -132,7 +132,16 @@
     "currentPassword": "Current password",
     "newPassword": "New password",
     "confirmPassword": "Confirm new password",
-    "passwordChangedSuccess": "Password changed successfully"
+    "passwordChangedSuccess": "Password changed successfully",
+    "changePasswordError": "Password change failed"
+  },
+  "changePasswordValidations": {
+    "currentPasswordRequired": "Current password is required",
+    "passwordRequired": "New password is required",
+    "passwordMinLength": "New password must be at least 8 characters",
+    "passwordPattern": "New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+    "confirmPasswordRequired": "Confirm password is required",
+    "passwordsMismatch": "Passwords do not match"
   },
   "users": {
     "block": "Block",

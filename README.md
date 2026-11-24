@@ -3,7 +3,7 @@ A full-stack social platform for publishing posts and comments, with an admin pa
 
 #### Tech stack:
 - **Monorepo:** `/frontend` (Angular) and `/strapi` (Strapi backend)
-- **Frontend:** Angular 22 (standalone components, Angular Signals, zoneless change detection), NgRx Signal Store, RxJS, PrimeNG 22, Tailwind, ngx-translate, date-fns
+- **Frontend:** Angular 22 (standalone components, Angular Signals, Signal Forms, zoneless change detection), NgRx Signal Store, RxJS, PrimeNG 22, Tailwind, ngx-translate, date-fns
 - **Backend:** Strapi 5, PostgreSQL (Neon)
 - **Hosting:** Render (backend, migrated from Strapi Cloud), Netlify (frontend), Cloudinary (media)
 - **Testing:** Karma, Jasmine

@@ -5,6 +5,7 @@ import {
   LoginCredentials,
   AuthResponse,
   RegisterCredentials,
+  ChangePassword,
 } from '../models/auth';
 import { UserStore } from '../store/user.store';
 import { Router } from '@angular/router';
@@ -25,15 +26,11 @@ export class AuthService extends ApiService {
     this.checkExistingToken();
   }
 
-  changePassword(
-    currentPassword: string,
-    password: string,
-    passwordConfirmation: string,
-  ): Observable<AuthResponse> {
+  changePassword(data: ChangePassword): Observable<AuthResponse> {
     return this.post<AuthResponse>(`auth/change-password`, {
-      currentPassword,
-      password,
-      passwordConfirmation,
+      currentPassword: data.currentPassword,
+      password: data.password,
+      passwordConfirmation: data.passwordConfirmation,
     }).pipe(
       tap((response) => {
         localStorage.setItem('jwt_token', response.jwt);
@@ -42,8 +39,10 @@ export class AuthService extends ApiService {
         );
       }),
       catchError((error) => {
-        this.toastService.errorToast(error.error.error.message);
-        return throwError(() => new Error(error.error.error.message));
+        const message =
+          error?.error?.error?.message ||
+          'changePassword.changePasswordError';
+        return throwError(() => new Error(message));
       }),
     );
   }

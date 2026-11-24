@@ -22,21 +22,21 @@ describe('Dialog', () => {
 
   describe('onVisibleChange', () => {
     it('emits the given value', () => {
-      spyOn(component.visibleChange, 'emit');
+      spyOn(component.visibilityChange, 'emit');
 
-      component.onVisibleChange(true);
+      component.onVisibilityChange(true);
 
-      expect(component.visibleChange.emit).toHaveBeenCalledWith(true);
+      expect(component.visibilityChange.emit).toHaveBeenCalledWith(true);
     });
   });
 
   describe('close', () => {
     it('emits false', () => {
-      spyOn(component.visibleChange, 'emit');
+      spyOn(component.visibilityChange, 'emit');
 
       component.close();
 
-      expect(component.visibleChange.emit).toHaveBeenCalledWith(false);
+      expect(component.visibilityChange.emit).toHaveBeenCalledWith(false);
     });
   });
 });
