@@ -2,16 +2,15 @@
   @if (type() === 'password') {
   <p-iconfield>
     <input pInputPassword [(mask)]="passwordMask" [value]="value()" [disabled]="disabled()"
-      [class.p-invalid]="showError" class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()" />
+      [class.p-invalid]="showError()" class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()" />
     <p-inputicon [class]="passwordMask ? 'pi pi-eye' : 'pi pi-eye-slash'" class="cursor-pointer"
       (click)="togglePasswordMask()" />
   </p-iconfield>
-  } @if(type() === 'textarea') {
-  <textarea pTextarea [rows]="rows()" [value]="value()" [disabled]="disabled()"
-    [class.p-invalid]="showError" class="w-full resize-none" (input)="onInput($event)" (blur)="touched.set(true)"
-    [id]="id()"></textarea>
+  } @else if(type() === 'textarea') {
+  <textarea pTextarea [rows]="rows()" [value]="value()" [disabled]="disabled()" [class.p-invalid]="showError()"
+    class="w-full resize-none" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()"></textarea>
   } @else {
-  <input pInputText [type]="type()" [value]="value()" [disabled]="disabled()" [class.p-invalid]="showError"
+  <input pInputText [type]="type()" [value]="value()" [disabled]="disabled()" [class.p-invalid]="showError()"
     class="w-full" (input)="onInput($event)" (blur)="touched.set(true)" [id]="id()" />
   }
 
@@ -21,7 +20,7 @@
 </p-floatlabel>
 
 <!-- Errors -->
-@if (showError && firstError; as error) {
+@if (showError() && firstError(); as error) {
 <small class="p-error block pl-2 mt-1">
   <span class="text-red-500">
     {{ error.message | translate }}
