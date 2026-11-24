@@ -132,7 +132,16 @@
     "currentPassword": "Aktualne hasło",
     "newPassword": "Nowe hasło",
     "confirmPassword": "Potwierdź nowe hasło",
-    "passwordChangedSuccess": "Hasło zmienione pomyślnie"
+    "passwordChangedSuccess": "Hasło zmienione pomyślnie",
+    "changePasswordError": "Zmiana hasła się nie powiodła"
+  },
+  "changePasswordValidations": {
+    "currentPasswordRequired": "Aktualne hasło jest wymagane",
+    "passwordRequired": "Nowe hasło jest wymagane",
+    "passwordMinLength": "Nowe hasło musi mieć co najmniej 8 znaków",
+    "passwordPattern": "Nowe hasło musi zawierać co najmniej jedną wielką literę, jedną małą literę, jedną cyfrę oraz jeden znak specjalny",
+    "confirmPasswordRequired": "Potwierdzenie hasła jest wymagane",
+    "passwordsMismatch": "Hasła nie są takie same"
   },
   "users": {
     "block": "Zablokuj",

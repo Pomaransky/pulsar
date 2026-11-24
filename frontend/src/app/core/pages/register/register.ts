@@ -70,7 +70,7 @@ export class Register implements OnInit {
     required(schemaPath.confirmPassword, { message: 'registerValidations.confirmPasswordRequired' });
     fieldsMatchValidator(schemaPath.confirmPassword, schemaPath.password, {
       kind: 'passwordMismatch',
-      message: 'Passwords dont match'
+      message: 'registerValidations.passwordsMismatch'
     })
   });
 

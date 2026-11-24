@@ -1,4 +1,4 @@
-import { Component, input, model } from '@angular/core';
+import { Component, computed, effect, input, model } from '@angular/core';
 import { FormValueControl, ValidationError } from '@angular/forms/signals';
 import { TranslateModule } from '@ngx-translate/core';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -18,6 +18,7 @@ export class InputFieldSignalForms implements FormValueControl<string> {
   // FormValueControl
   readonly value = model<string>('');
   readonly touched = model<boolean>(false);
+  readonly dirty = input<boolean>(false);
   readonly disabled = input<boolean>(false);
   readonly invalid = input<boolean>(false);
   readonly errors = input<readonly ValidationError[]>([]);
@@ -30,15 +31,8 @@ export class InputFieldSignalForms implements FormValueControl<string> {
   readonly id = input(`app-input-${++InputFieldSignalForms.nextId}`);
   readonly label = input<string>('');
   readonly type = input<'text' | 'password' | 'email' | 'textarea'>('text');
-
-  get showError(): boolean {
-    return this.touched() && this.invalid();
-  }
-
-  get firstError(): ValidationError | undefined {
-    return this.errors()[0];
-  }
-
+  readonly showError = computed(() => (this.touched() || this.dirty()) && this.invalid());
+  readonly firstError = computed(() => this.errors()[0]);
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.value.set(target.value);
