@@ -1,64 +1,20 @@
-<app-dialog
-  [visible]="visible()"
-  (visibilityChange)="visible.set($event)"
-  [title]="'editProfile.title' | translate"
-  icon="pi pi-user-edit"
-  styleClass="w-full sm:w-[500px]"
->
-  <form
-    [formGroup]="editForm"
-    (ngSubmit)="onEdit()"
-    class="flex flex-col gap-5"
-  >
-    <app-input-field
-      [label]="'editProfile.firstName' | translate"
-      inputId="firstName"
-      formControlName="firstName"
-      labelWidth="10rem"
-    />
+<app-dialog [visible]="visible()" (visibilityChange)="visible.set($event)" [title]="'editProfile.title' | translate"
+  icon="pi pi-user-edit" styleClass="w-full sm:w-[500px]">
+  <form (submit)="onEdit($event)" class="flex flex-col gap-5">
+    <app-input-field-signal-forms [formField]="editForm.firstName" label="editProfile.firstName" />
+    <app-input-field-signal-forms [formField]="editForm.lastName" label="editProfile.lastName" />
+    <p-datepicker type="datepicker" [dateFormat]="'dd/mm/yy'" [formField]="editForm.birthDate"
+      label="editProfile.birthDate" [appendTo]="'body'" />
+    <app-input-field-signal-forms type="textarea" [rows]="4" [formField]="editForm.aboutMe"
+      label="editProfile.aboutMe"/>
 
-    <app-input-field
-      [label]="'editProfile.lastName' | translate"
-      inputId="lastName"
-      formControlName="lastName"
-      labelWidth="10rem"
-    />
-
-    <app-input-field
-      [label]="'editProfile.birthDate' | translate"
-      inputId="birthDate"
-      formControlName="birthDate"
-      type="datepicker"
-      [dateFormat]="'dd/mm/yy'"
-      [showDateIcon]="true"
-      labelWidth="10rem"
-    />
-
-    <app-input-field
-      [label]="'editProfile.aboutMe' | translate"
-      inputId="aboutMe"
-      formControlName="aboutMe"
-      type="textarea"
-      [rows]="4"
-      labelWidth="10rem"
-      [validationMessages]="validations.aboutMe"
-    />
-  </form>
-
-  <div dialogFooter class="w-full flex items-center justify-end gap-2 mt-6">
-    <p-button
-      type="button"
-      [label]="'common.cancel' | translate"
-      [outlined]="true"
-      (click)="visible.set(false)"
-      styleClass="w-32"
-    />
-    <p-button
-      type="button"
-      [label]="'common.save' | translate"
-      (click)="onEdit()"
-      styleClass="w-32"
-      [disabled]="editForm.invalid"
-    />
-  </div>
+<div dialogFooter class="w-full flex items-center justify-end gap-2">
+  <button pButton size="large" type="button" [outlined]="true" (click)="changeVisibility(false)" class="w-32"><span
+      pButtonLabel>{{ 'common.cancel' | translate }}</span></button>
+  <button pButton type="submit" size="large" class="w-32"
+    [disabled]="editForm().invalid() || editForm().submitting()">
+    <span pButtonLabel>{{ 'common.save' | translate }}</span>
+  </button>
+</div>
+</form>
 </app-dialog>
