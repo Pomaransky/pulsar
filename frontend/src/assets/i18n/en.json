@@ -122,7 +122,8 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "birthDate": "Birth Date",
-    "aboutMe": "About Me"
+    "aboutMe": "About Me",
+    "editProfileError": "Error while editing profile"
   },
   "editProfileValidations": {
     "aboutMeMaxLength": "About Me must be less than 255 characters"

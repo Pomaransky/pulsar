@@ -9,3 +9,4 @@ export * from './user-role-type.enum';
 export * from './user-ban-type.enum';
 export * from './user-ban-update.model';
 export * from './change-password.model';
+export * from './edit-form.model';

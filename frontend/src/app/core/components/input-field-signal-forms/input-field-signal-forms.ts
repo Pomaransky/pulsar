@@ -33,6 +33,7 @@ export class InputFieldSignalForms implements FormValueControl<string> {
   readonly type = input<'text' | 'password' | 'email' | 'textarea'>('text');
   readonly showError = computed(() => (this.touched() || this.dirty()) && this.invalid());
   readonly firstError = computed(() => this.errors()[0]);
+
   onInput(event: Event): void {
     const target = event.target as HTMLInputElement;
     this.value.set(target.value);

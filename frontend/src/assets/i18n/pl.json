@@ -115,7 +115,8 @@
     "somethingWentWrong": "Coś poszło nie tak",
     "loadingProfile": "Ładowanie profilu...",
     "myPosts": "Moje posty",
-    "likes": "Polubienia"
+    "likes": "Polubienia",
+    "editProfileError": "Błąd podczas edycji profilu"
   },
   "editProfile": {
     "title": "Edytuj profil",
