@@ -19,9 +19,9 @@ import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { TableColumn, RowActionItem, TableLoadParams } from '../../models';
 import { TableCell } from './components/table-cell/table-cell';
-import { InputField } from '../input-field/input-field';
 import { CardModule } from 'primeng/card';
 import { TranslateService } from '@ngx-translate/core';
+import { InputFieldSignalForms } from '../input-field-signal-forms/input-field-signal-forms';
 
 const SEARCH_DEBOUNCE_MS = 500;
 
@@ -33,10 +33,10 @@ const SEARCH_DEBOUNCE_MS = 500;
     Menu,
     TableCell,
     FormsModule,
-    InputField,
     CardModule,
     TranslateModule,
-  ],
+    InputFieldSignalForms
+],
   templateUrl: './table.html',
   styleUrl: './table.scss',
 })

@@ -1,14 +1,12 @@
 <p-card>
   @if (showSearch) {
     <div class="flex justify-end mb-2">
-      <app-input-field
-        inputId="table-search"
-        [placeholder]="searchPlaceholder | translate"
-        [ngModel]="filterValue"
-        (ngModelChange)="onSearchInput($event)"
-        icon="search"
-        containerClass="max-w-3xs"
-      />
+      <app-input-field-signal-forms 
+        [ngModel]="filterValue" 
+        [placeholder]="searchPlaceholder | translate" 
+        (ngModelChange)="onSearchInput($event)" 
+        icon="search" 
+        floatLabelVariant="on" />
     </div>
   }
   <p-table

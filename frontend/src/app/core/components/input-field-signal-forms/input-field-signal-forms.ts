@@ -30,6 +30,9 @@ export class InputFieldSignalForms implements FormValueControl<string> {
   // UI
   readonly id = input(`app-input-${++InputFieldSignalForms.nextId}`);
   readonly label = input<string>('');
+  readonly icon = input<string>('');
+  readonly floatLabelVariant = input<'in' | 'on'>('in');
+  readonly placeholder = input<string | null>(null);
   readonly type = input<'text' | 'password' | 'email' | 'textarea'>('text');
   readonly showError = computed(() => (this.touched() || this.dirty()) && this.invalid());
   readonly firstError = computed(() => this.errors()[0]);
