@@ -16,6 +16,7 @@ import { ToastService } from './toast-service';
 import { tableLoadParamsToStrapiQuery } from '../utils/table-load-params-to-query';
 import { TranslateService } from '@ngx-translate/core';
 import { FileApiService } from './file-api-service';
+import { EditForm } from '../models/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -71,10 +72,8 @@ export class UserApiService extends ApiService {
     );
   }
 
-  editMe(
-    user: Pick<User, 'id' | 'firstName' | 'lastName' | 'birthDate' | 'aboutMe'>,
-  ): Observable<User | null> {
-    return this.put<User>(`user/me`, user).pipe(
+  editMe(data: EditForm & Pick<User, 'id'>): Observable<User | null> {
+    return this.put<User>(`user/me`, data).pipe(
       tap(() => {
         this.toastService.successToast(
           this.translate.instant('user.userDataUpdated'),
